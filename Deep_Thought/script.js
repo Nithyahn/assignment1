@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const modeToggleBtn = document.createElement('button');
     modeToggleBtn.textContent = 'Dark-Light';
     modeToggleBtn.style.position = 'fixed';
-    modeToggleBtn.style.top = '65px'; // Adjust this value as needed
+    modeToggleBtn.style.top = '85px'; // Adjust this value as needed
     modeToggleBtn.style.right = '60px'; // Adjust this value as needed
     modeToggleBtn.style.zIndex = '1000'; // Ensure it stays on top
     document.body.appendChild(modeToggleBtn);
