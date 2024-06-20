@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const submitTaskBtn = document.getElementById('submitTaskBtn');
   const boxes = document.querySelectorAll('.box');
   const images = document.querySelectorAll('.hover-zoom');
+  const tasksContainer = document.getElementById('tasks-container'); // Ensure this exists in your HTML
 
   // Dropdown functionality
   ellipsis.addEventListener('click', function(event) {
@@ -52,16 +53,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Dark/Light mode toggle
   const modeToggleBtn = document.createElement('button');
-    modeToggleBtn.textContent = 'Dark-Light';
-    modeToggleBtn.style.position = 'fixed';
-    modeToggleBtn.style.top = '85px'; // Adjust this value as needed
-    modeToggleBtn.style.right = '60px'; // Adjust this value as needed
-    modeToggleBtn.style.zIndex = '1000'; // Ensure it stays on top
-    document.body.appendChild(modeToggleBtn);
+  modeToggleBtn.textContent = 'Dark-Light';
+  modeToggleBtn.style.position = 'absolute';
+  modeToggleBtn.style.top = '85px'; // Adjust this value as needed
+  modeToggleBtn.style.right = '60px'; // Adjust this value as needed
+  modeToggleBtn.style.zIndex = '1000'; // Ensure it stays on top
+  document.body.appendChild(modeToggleBtn);
 
-    modeToggleBtn.addEventListener('click', function() {
-        document.body.classList.toggle('dark-mode');
-    });
+  modeToggleBtn.addEventListener('click', function() {
+      document.body.classList.toggle('dark-mode');
+  });
 
   // Add key press event listener for Enter key on input fields
   document.querySelectorAll('input').forEach(input => {
@@ -112,15 +113,11 @@ document.addEventListener('DOMContentLoaded', function() {
   modal.classList.add('modal');
   modal.innerHTML = `
       <div class="modal-content">
-        
+          <p></p>
       </div>`;
   document.body.appendChild(modal);
 
-
-  document.querySelector('.modal .close').addEventListener('click', function() {
-      modal.style.display = 'none';
-  });
-
+  // Only the modal close and click outside functionality remains
   window.addEventListener('click', function(event) {
       if (event.target === modal) {
           modal.style.display = 'none';
@@ -175,4 +172,70 @@ document.addEventListener('DOMContentLoaded', function() {
           alert('Right-click menu for image: ' + image.src);
       });
   });
+
+  // Load and display tasks from tasks.json
+  // Load and display tasks from tasks.json
+fetch('tasks.json')
+.then(response => response.json())
+.then(data => {
+    data.tasks.forEach(task => {
+        const taskElement = document.createElement('div');
+        taskElement.className = 'task'; 
+        const taskTitle = document.createElement('h2');
+        taskTitle.textContent = task.task_title;
+        taskTitle.style.color = 'blue'; 
+        taskTitle.style.marginTop = '40px';
+        taskTitle.style.marginLeft = '20px';
+        taskTitle.style.fontWeight = 'bold';
+        taskElement.appendChild(taskTitle);
+
+        
+        const taskDescription = document.createElement('p');
+        taskElement.className = 'task';
+        taskDescription.textContent = task.task_description;
+        taskDescription.innerHTML = `As a project manager, you play an important role
+in leading a project through initiation, planning, execution, monitoring,
+controlling, and completion. How?<br>Do you want to manage each and every 
+step of your life?`;
+        taskDescription.style.marginLeft = '60px';
+        
+        taskElement.appendChild(taskDescription);
+
+        task.assets.forEach(asset => {
+            const assetElement = document.createElement('div');
+            assetElement.className = 'asset';
+
+          
+            const assetTitle = document.createElement('h4');
+            assetTitle.textContent = asset.asset_title;
+            assetTitle.style.fontWeight = 'bold'; // Example CSS style
+            assetTitle.style.fontSize = '20px';
+            assetTitle.style.marginLeft = '20px'; // Example CSS style
+            assetElement.appendChild(assetTitle);
+
+            const assetDescription = document.createElement('p');
+            assetDescription.textContent = asset.asset_description;
+          
+            assetDescription.style.marginLeft = '40px'
+            assetElement.appendChild(assetDescription);
+
+            if (asset.asset_type === 'display_asset') {
+                const iframeWrapper = document.createElement('div');
+                iframeWrapper.classList.add('responsive-iframe-wrapper');
+
+                const iframe = document.createElement('iframe');
+                iframe.src = asset.asset_content;
+                iframe.allowFullscreen = true;
+
+                iframeWrapper.appendChild(iframe);
+                assetElement.appendChild(iframeWrapper);
+            }
+
+            taskElement.appendChild(assetElement);
+        });
+
+        tasksContainer.appendChild(taskElement);
+    });
+})
+.catch(error => console.error('Error loading JSON data:', error));
 });

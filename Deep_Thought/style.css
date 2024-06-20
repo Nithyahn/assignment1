@@ -407,6 +407,28 @@ body.dark-mode .buttons {
 }
 
 
+.responsive-iframe-wrapper {
+  position: relative;
+  width: 20px;
+  padding-bottom: 18.25%; 
+  height: 0;
+  padding-top: 30px;
+  margin-left: 400px;
+ gap: 21px;
+
+}
+
+.responsive-iframe-wrapper iframe {
+  position: absolute;
+  display: flex;
+  top: 0;
+  left: 0;
+  width: 400px;
+  height: 250px;
+  border-radius: 9px;   
+}
+
+
 
 
 
